@@ -1,8 +1,9 @@
-<Activity mc:Ignorable="sap sap2010" x:Class="ACME_NavigateToWorkItems" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib" xmlns:sd="clr-namespace:System.Drawing;assembly=System.Drawing" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+<Activity mc:Ignorable="sap sap2010" x:Class="ACME_NavigateToWorkItems" this:ACME_NavigateToWorkItems.In_SearchField="Client ID:" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib" xmlns:sd="clr-namespace:System.Drawing;assembly=System.Drawing" xmlns:this="clr-namespace:" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
     <x:Property Name="out_CustomerID" Type="OutArgument(x:String)" />
     <x:Property Name="out_CustomerName" Type="OutArgument(x:String)" />
-    <x:Property Name="out_CustomerCountry" Type="OutArgument(x:String)" />
+    <x:Property Name="out_FoundValue" Type="OutArgument(x:String)" />
+    <x:Property Name="In_SearchField" Type="InArgument(x:String)" />
   </x:Members>
   <mva:VisualBasic.Settings>
     <x:Null />
@@ -63,8 +64,6 @@
       <Variable x:TypeArguments="x:String" Default="ACME_ExtractWorkItemDetails" Name="strComponentName" />
       <Variable x:TypeArguments="ui:GenericValue" Name="strExtractedText" />
       <Variable x:TypeArguments="s:String[]" Name="arrDetails" />
-      <Variable x:TypeArguments="x:String" Name="strTrimmedText" />
-      <Variable x:TypeArguments="x:String" Name="strFilteredText" />
     </Sequence.Variables>
     <sap:WorkflowViewStateService.ViewState>
       <scg:Dictionary x:TypeArguments="x:String, x:Object">
@@ -87,9 +86,6 @@
         </scg:Dictionary>
       </sap:WorkflowViewStateService.ViewState>
       <Sequence DisplayName="Screen Scraping" sap:VirtualizedContainerService.HintSize="475.2,502.4" sap2010:WorkflowViewState.IdRef="Sequence_9">
-        <Sequence.Variables>
-          <Variable x:TypeArguments="ui:GenericValue" Name="P" />
-        </Sequence.Variables>
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -174,20 +170,20 @@
                 </scg:Dictionary>
               </sap:WorkflowViewStateService.ViewState>
               <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="483.2,92.8" sap2010:WorkflowViewState.IdRef="LogMessage_6" Level="Info" Message="[item]" />
-              <If Condition="[item.contains(&quot;Client ID:&quot;)]" sap:VirtualizedContainerService.HintSize="483.2,209.6" sap2010:WorkflowViewState.IdRef="If_1">
+              <If Condition="[item.contains(In_SearchField)]" sap:VirtualizedContainerService.HintSize="483.2,209.6" sap2010:WorkflowViewState.IdRef="If_1">
                 <If.Then>
                   <Assign sap:VirtualizedContainerService.HintSize="262.4,60" sap2010:WorkflowViewState.IdRef="Assign_3">
                     <Assign.To>
-                      <OutArgument x:TypeArguments="x:String">[out_CustomerID]</OutArgument>
+                      <OutArgument x:TypeArguments="x:String">[out_FoundValue]</OutArgument>
                     </Assign.To>
                     <Assign.Value>
-                      <InArgument x:TypeArguments="x:String">[item]</InArgument>
+                      <InArgument x:TypeArguments="x:String">[item.Replace(In_SearchField, "")]</InArgument>
                     </Assign.Value>
                   </Assign>
                 </If.Then>
               </If>
             </Sequence>
-            <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="524.8,92.8" sap2010:WorkflowViewState.IdRef="LogMessage_8" Level="Info" Message="[&quot;Customer ID: &quot; + out_CustomerID]" />
+            <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="524.8,92.8" sap2010:WorkflowViewState.IdRef="LogMessage_8" Level="Info" Message="[&quot;Returned value is &quot; + out_FoundValue]" />
           </Sequence>
         </ActivityAction>
       </ui:ForEach.Body>
