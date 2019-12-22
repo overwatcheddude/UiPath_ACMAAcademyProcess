@@ -60,7 +60,7 @@
   </TextExpression.ReferencesForImplementation>
   <Sequence DisplayName="Generic_FilterDataTable" sap:VirtualizedContainerService.HintSize="592,1639.2" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
-      <Variable x:TypeArguments="x:String" Default="%[Enter component name here]" Name="strComponentName" />
+      <Variable x:TypeArguments="x:String" Default="SHA1_GenerateHash" Name="strComponentName" />
       <Variable x:TypeArguments="x:Boolean" Name="boolScreenExists" />
     </Sequence.Variables>
     <sap:WorkflowViewStateService.ViewState>
